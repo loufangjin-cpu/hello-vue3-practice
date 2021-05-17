@@ -26,17 +26,20 @@ module.exports = {
   },
   // webpack-chain称为链式操作，可以更细粒度控制webpack内部配置。
   chainWebpack(config) {
-    // icon-svg
-    // 1、重点:删除默认配置中处理svg， 新增svg目录
-    config.module.rule('svg').exclude.add(resolve('./src/icons'))
-    // 配置svg-sprite-loader 只包含icon 目录
-    config.module
-      .rule('icons')
-      .test(/\.svg$/)
-      .include.add(resolve('./src/icons')) // 这里进入了include内部，要结束上下文
-      .end() // 回退上一级
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
-      .options({ symbolId: 'icon-[name]' }) // #icon-[name] name是文件名
-  }
+                         // icon-svg
+                         // url-load对图片进行处理base64格式
+                         // 1、重点:删除默认配置中处理svg， 新增svg目录
+                         config.module
+                           .rule('svg')
+                           .exclude.add(resolve('./src/icons'))
+                         // 配置svg-sprite-loader 只包含icon 目录
+                         config.module
+                           .rule('icons')
+                           .test(/\.svg$/)
+                           .include.add(resolve('./src/icons')) // 这里进入了include内部，要结束上下文
+                           .end() // 回退上一级
+                           .use('svg-sprite-loader')
+                           .loader('svg-sprite-loader')
+                           .options({ symbolId: 'icon-[name]' }) // #icon-[name] name是文件名
+                       }
 }
