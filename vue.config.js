@@ -27,7 +27,7 @@ module.exports = {
   // webpack-chain称为链式操作，可以更细粒度控制webpack内部配置。
   chainWebpack(config) {
                          // icon-svg
-                         // url-load对图片进行处理base64格式
+                         // 默认svg, url-load对图片进行处理base64格式
                          // 1、重点:删除默认配置中处理svg， 新增svg目录
                          config.module
                            .rule('svg')
