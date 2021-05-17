@@ -18,8 +18,11 @@ export default {
   },
   components: {
     SvgIcon
+  },
+  mounted() {
+    console.log('VUE_APP_BASE_API', process.env.VUE_APP_BASE_API)
   }
-}
+ }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
