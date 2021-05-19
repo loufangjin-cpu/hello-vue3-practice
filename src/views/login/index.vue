@@ -11,7 +11,12 @@ export default defineComponent({
     const store = useStore()
     const goToSkip = () => {
       store.commit('moduleB/setNum')
-      router.push(`/home?name=about`)
+      // router.push(`/home?name=about`)
+      const name = 'helloxxxx'
+      // params 模式
+      // router.push({path: `/home/${name}`})
+      // query 模式
+      router.push({ path: '/home', query: { name }})
     }
     return {
       goToSkip
