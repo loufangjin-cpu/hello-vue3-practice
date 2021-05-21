@@ -7,21 +7,27 @@
   <title>Reactive</title>
 </head>
 <body>
-  <div id="app">{{msg}}</div>
+  <div id="app"></div>
   <script src="./utils/mini-vue3.js"></script>
   <script>
       // 定义一个响应式数据
       const state = reactive({
-        msg:'message'
+        msg:'message',
+        obj: {
+          name: 'hello'
+        }
       })
       // 定义一个使用到响应式数据的dom更新函数
       effect(()=>{
-        document.getElementById('app').innerText = state.msg
+        document.getElementById('app').innerText = `${state.msg} + ${state.obj.name} + ${state.obj.c}`
       })
+
       // 定时更新响应式数据
-      // setInterval(()=>{
-      //   state.msg = 'message' + Math.random()
-      // },1000)
+      setInterval(()=>{
+        state.msg = 'message' + Math.random()
+        state.obj.name = 'name' + Math.random()
+        state.obj.c = 'ccccc' + Math.random()
+      },1000)
   </script>
 </body>
 </html>
