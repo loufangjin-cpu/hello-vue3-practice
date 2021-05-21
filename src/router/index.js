@@ -26,6 +26,25 @@ export const constRoutes = [
            component: () => import('@/views/login')
          },
          {
+           path: '/reactive',
+           name: 'Reactive',
+           meta: {
+             title: '响应式迷里版',
+             keepAlive: true
+           },
+           component: () => import('@/views/reactive')
+         },
+         {
+           path: '/about',
+           component: () => import('@/views/about'),
+           name: 'About',
+           meta: {
+             title: 'About',
+             icon: 'denglong',
+             roles: ['admin', 'editor']
+           }
+         },
+         {
            path: '/:pathMatch(.*)*',
            component: () => import('@/views/no-found')
          }

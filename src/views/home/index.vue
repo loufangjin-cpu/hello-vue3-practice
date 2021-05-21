@@ -4,7 +4,7 @@
 <script>
 import { defineComponent, reactive, toRefs, computed } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from "vue-router"
+import {useRoute} from "vue-router"
 
 export default defineComponent({
   setup() {
