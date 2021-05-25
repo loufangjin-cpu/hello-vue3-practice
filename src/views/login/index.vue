@@ -4,14 +4,19 @@
 <script>
 import { defineComponent } from 'vue'
 import {useRouter} from "vue-router"
-// import { useStore } from 'vuex'
+import { useStore } from 'vuex'
 export default defineComponent({
   setup() {
     const router = useRouter()
-    // const store = useStore()
-    // console.log('store', store.state.moduleB)
+    const store = useStore()
     const goToSkip = () => {
-      router.push(`/home?name=about`)
+      store.commit('moduleB/setNum')
+      // router.push(`/home?name=about`)
+      const name = 'helloxxxx'
+      // params 模式
+      // router.push({path: `/home/${name}`})
+      // query 模式
+      router.push({ path: '/home', query: { name }})
     }
     return {
       goToSkip

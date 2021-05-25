@@ -12,6 +12,9 @@ export const moduleB = {
     setRoutes: (state, routes) => {
       state.addRoutes = routes
       state.routes = constRoutes.concat(routes)
+    },
+    setNum: (state) => {
+      state.name = 'world'
     }
   },
   actions: {
