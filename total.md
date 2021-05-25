@@ -6,3 +6,4 @@
   // 源码链接2: https://vue3js.cn/start/
 
   实现vue3 mini版： https://segmentfault.com/a/1190000023465134 
+  对比vue2 ： https://segmentfault.com/a/1190000022696134?utm_source=sf-similar-article

@@ -2,32 +2,24 @@ const isObject = (v) => v !== null && typeof v === 'object'
 
 /* 建立响应式数据 */
 function reactive(obj) {
-  // Proxy:http://es6.ruanyifeng.com/#docs/proxy
-  // Proxy相当于在对象外层加拦截
-  // Proxy递归是惰性的,需要添加递归的逻辑
-
-  // Reflect:http://es6.ruanyifeng.com/#docs/reflect
   // Reflect:用于执行对象默认操作，更规范、更友好,可以理解成操作对象的合集
   // Proxy和Object的方法Reflect都有对应
   if (!isObject(obj)) return obj
   const observed = new Proxy(obj, {
     get(target, key, receiver) {
       const ret = Reflect.get(target, key, receiver)
-      console.log('getter ' + ret)
       // 跟踪 收集依赖
       track(target, key)
       return reactive(ret)
     },
     set(target, key, val, receiver) {
       const ret = Reflect.set(target, key, val, receiver)
-      console.log('setter ' + key + ':' + val + '=>' + ret)
       // 触发更新
       trigger(target, key)
       return ret
     },
     deleteProperty(target, key) {
       const ret = Reflect.deleteProperty(target, key)
-      console.log('delete ' + key + ':' + ret)
       // 触发更新
       trigger(target, key)
       return ret
@@ -88,10 +80,3 @@ function trigger(target, key) {
     }
   }
 }
-
-// const state = reactive({foo:'foo', bar:{a:1}, arr:[1,2,3]})
-// // effect里传入一个会触发getter的回调函数
-// effect(()=>{
-//   console.log(state.foo)
-// })
-// state.foo = 'bar'
