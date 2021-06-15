@@ -1,9 +1,6 @@
 const isObject = (v) => v !== null && typeof v === 'object'
-
 /* 建立响应式数据 */
 function reactive(obj) {
-  // Reflect:用于执行对象默认操作，更规范、更友好,可以理解成操作对象的合集
-  // Proxy和Object的方法Reflect都有对应
   if (!isObject(obj)) return obj
   const observed = new Proxy(obj, {
     get(target, key, receiver) {
@@ -27,15 +24,12 @@ function reactive(obj) {
   })
   return observed
 }
-
 /* 声明响应函数cb */
 const effectStack = []
 function effect(cb) {
   // 对函数进行高阶封装
   const rxEffect = function() {
-    // 1.捕获异常
-    // 2.fn出栈入栈
-    // 3.执行fn
+    // 1.捕获异常 2.cb出栈入栈 3.执行cb
     try {
       effectStack.push(rxEffect)
       return cb()
@@ -43,15 +37,15 @@ function effect(cb) {
       effectStack.pop()
     }
   }
-
   // 最初要执行一次,进行最初的依赖收集
   rxEffect()
-
   return rxEffect
 }
 
 /* 依赖收集：建立 数据&cb 映射关系 */
+
 const targetMap = new WeakMap()
+// target是原对象
 function track(target, key) {
   // 存入映射关系
   const effectFn = effectStack[effectStack.length - 1] // 拿出栈顶函数
@@ -63,9 +57,11 @@ function track(target, key) {
     }
     let deps = depsMap.get(key)
     if (!deps) {
-      deps = new Set()
-      depsMap.set(key, deps)
-    }
+                  // 收集依赖时 通过 key 建立一个 set
+                  deps = new Set()
+                  depsMap.set(key, deps)
+                }
+    // 这个 effectFn 可以先理解为更新函数 存放在 dep 里
     deps.add(effectFn)
   }
 }
@@ -73,6 +69,7 @@ function track(target, key) {
 /* 触发更新：根据映射关系，执行cb */
 function trigger(target, key) {
   const depsMap = targetMap.get(target)
+  console.log('depsMap', depsMap)
   if (depsMap) {
     const deps = depsMap.get(key)
     if (deps) {

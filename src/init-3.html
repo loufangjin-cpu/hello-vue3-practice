@@ -11,7 +11,6 @@
 <script>
   const createAppAPI = (render) => {
     return function createApp(rootComponent) {
-      console.log('rootComponent', rootComponent);
       const app = {
         mount(rootContainer) {
           // 挂载 vnode => dom
@@ -30,9 +29,7 @@
   
   // 2.实现renderer工厂函数
   const createRenderer = options => {
-    console.log('options', options);
     const patch = (n1, n2, container) => {
-      console.log('///', n1 , n2, container);
       // 根组件配置
       const rootComponent = n2.tag
       const ctx = {...rootComponent.data()}
@@ -42,8 +39,6 @@
       // 转换vnode dom
       const parent = options.querySelector(container)
       const child = options.createElement(vnode.tag)
-      console.log('child', child);
-      console.log('vnode.children', vnode.children)
       if (typeof vnode.children === 'string') {
         child.textContent = vnode.children
       } else {
@@ -52,8 +47,6 @@
       options.insert(child, parent)
     }
     const render = (vnode, container) => {
-      console.log('vnode', vnode);
-      console.log('container', container);
       patch(container._vnode || null, vnode, container)
       container._vnode = vnode
     }

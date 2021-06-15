@@ -10,24 +10,29 @@
   <div id="app"></div>
   <script src="./utils/mini-vue3.js"></script>
   <script>
-      // 定义一个响应式数据
+      // 定义一个响应式数据 
+      // 初始化定义 reactive 的时候，只会对 obj 浅层定义响应式，而真正读取到 state.msg 的时候，才会对 msg 这一层对象定义响应式
       const state = reactive({
         msg:'message',
         obj: {
           name: 'hello'
         }
       })
-      // 定义一个使用到响应式数据的dom更新函数
+      // 观测响应数据变化
       effect(()=>{
         document.getElementById('app').innerText = `${state.msg} + ${state.obj.name} + ${state.obj.c}`
       })
 
-      // 定时更新响应式数据
-      setInterval(()=>{
+      // 更新响应式数据
+      setTimeout(()=>{
         state.msg = 'message' + Math.random()
-        state.obj.name = 'name' + Math.random()
         state.obj.c = 'ccccc' + Math.random()
       },1000)
+
+      //删除响应数据数据
+      setTimeout(() => {
+        delete state.obj.name
+      }, 2000)
   </script>
 </body>
 </html>
