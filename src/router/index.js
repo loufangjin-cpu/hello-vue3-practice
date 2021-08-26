@@ -17,6 +17,15 @@ export const constRoutes = [
            component: () => import('@/views/home')
          },
          {
+           path: '/virtual-scroll',
+           name: 'VirtualScroll',
+           meta: {
+             title: '虚拟长列表',
+             keepAlive: true
+           },
+           component: () => import('@/views/virtual-scroll')
+         },
+         {
            path: '/login',
            name: 'Login',
            meta: {
