@@ -25,7 +25,10 @@
    ws.onopen=function(event) {
             //当有消息发过来时，就将消息放到显示元素上
               ws.onmessage=function(event) {
-                recMsg.innerHTML=event.data;
+                const cm = document.createElement('p')
+                const om = document.querySelector('#recMsg')
+                cm.innerHTML = event.data
+                om.append(cm)
               }
             }
 </script>
