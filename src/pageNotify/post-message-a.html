@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>post-messsage-a</title>
+</head>
+<body>
+  <h1>post-messsage-a 页面</h1>
+  <button type="button" onclick="openPost()">发送b页面消息</button>
+  <script>
+    window.name = 'post-messsage-a'
+    function openPost() {
+      window.open("post-message-b.html?code=123", "post-messsage-B")
+    }
+    window.addEventListener("message", receiveMessage, false);
+    function receiveMessage(event) {
+        console.log('收到消息：', event.data)
+    }
+  </script>
+</body>
+</html>

@@ -17,8 +17,5 @@ yarn build
 
 ### Lints and fixes files
 ```
-yarn lint
+  前端资源汇总
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/)

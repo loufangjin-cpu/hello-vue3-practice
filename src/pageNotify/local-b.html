@@ -1,0 +1,22 @@
+<!-- B.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>local-b</title>
+    <button type="button" onclick="sendA()">发送b页面消息</button>
+
+</head>
+<body>
+    <h1>local页面</h1>
+    <span>local-b</span>
+    <script>
+        window.name = 'local'
+        function sendA () {
+            console.log('local')
+            localStorage.setItem('name', `sss`)
+        }
+    </script>
+</body>
+</html>

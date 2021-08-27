@@ -1,0 +1,24 @@
+<!-- localA.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>localA</title>
+</head>
+<body>
+    <h1>localA 页面</h1>
+    <button type="button" onclick="openB()">B</button>
+    <script>
+        window.name = 'localA'
+        function openB() {
+          console.log('..')
+          window.open("local-b.html", "B")
+        }
+
+        window.addEventListener('storage', function (value) {// 监听 hash
+            console.log('storage', value)
+        }, false);
+    </script>
+</body>
+</html>
