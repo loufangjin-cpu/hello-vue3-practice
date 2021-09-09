@@ -1,3 +1,3 @@
 module.exports = {
-  title: 'about'
+  title: 'home标题'
 }

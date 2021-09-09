@@ -1,6 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
+const chalk = require('chalk')
+const log = console.log
+const qs = require('query-string')
 
 const isDev = process.env.NODE_ENV === 'development'
 const argv = require('yargs').alias('p', 'page').argv
@@ -14,6 +17,8 @@ const entries = config.getEntries({
 })
 const pages = entries.entries
 console.log('pages', pages)
+
+console.time('build spend')
 if (!Object.keys(pages).length) {
   throw new Error('无可构建内容')
 }
@@ -37,14 +42,20 @@ const chainWebpack = (config) => {
       .contentBase(path.join(__dirname, 'src'))
       .hotOnly(true)
       .set('onListening', (server) => {
-        console.log('server', server)
-        // const port = server.listeningApp.address().port
-        // for (const n in pages) {
-        //   let params = ''
-        //   if (pages[n].getTestQueryParams) {
-        //     params = '?' + qs.stringify(pages[n].getTestQueryParams())
-        //   }
-        // }
+        const port = server.listeningApp.address().port
+        log('see:')
+        for (const n in pages) {
+          let params = ''
+          if (pages[n].getTestQueryParams) {
+            params = '?' + qs.stringify(pages[n].getTestQueryParams())
+          }
+          log(
+            chalk.underline.blue(
+              `${`http://localhost:${port}`}/${pages[n].path}${params}`
+            ) + `  --- ${pages[n].desc || pages[n].title}`
+          )
+        }
+        log('\n')
       })
       .end()
   } else {
@@ -60,6 +71,21 @@ const chainWebpack = (config) => {
       )
       .end()
   }
+  //
+  config.module
+    .rule('url')
+    .test(/\.(atlas|jsonp)$/)
+    .use('url')
+    .loader('url-loader')
+    .tap((options) => {
+      options = {
+        limit: 1024 * 3,
+        ...options
+      }
+      console.log(options)
+      return options
+    })
+    .end()
   // icon-svg
   // 默认svg, url-load对图片进行处理base64格式
   // 1、重点:删除默认配置中处理svg， 新增svg目录
