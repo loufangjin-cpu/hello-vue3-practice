@@ -13,24 +13,22 @@
   <h1 >收到的消息:<p id="recMsg"></p></h1>
 
   <script>
-    //建立到服务端webSoket连接
-  var ws= new WebSocket('ws://localhost:8082')
-    send.onclick=function(){
-      console.log('////')
-      if(msg.value.trim()!=''){//如果msg输入框内容不是空的
-        ws.send(msg.value.trim())  //将msg输入框中的内容发送给服务器
-      }
-  }
-   //当连接被打开时，注册接收消息的处理函数
-  ws.onopen=function(event) {
-            //当有消息发过来时，就将消息放到显示元素上
-              ws.onmessage=function(event) {
+      var myWorker = new SharedWorker("sharedWorker.js");
+      if (!!window.SharedWorker) {
+        send.onclick=function(){
+            console.log('////')
+            if(msg.value.trim()!=''){//如果msg输入框内容不是空的
+              // myWorker.port.postMessage(msg.value.trim())  //将msg输入框中的内容发送给服务器
+              myWorker.port.onmessage = function(e) {
+                console.log('Message received from worker');
                 const cm = document.createElement('p')
                 const om = document.querySelector('#recMsg')
-                cm.innerHTML = event.data
+                cm.innerHTML =  e.data
                 om.append(cm)
               }
             }
+        }
+      }
 </script>
 </body>
 </html>

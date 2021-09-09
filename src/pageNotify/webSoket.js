@@ -1,6 +1,4 @@
 // websocket服务器端搭建
-const net = require('net')
-const server = new net.createServer()
 var WebSocket = require('ws')
 var wss = new WebSocket.Server({ port: 8082 })
 
@@ -30,4 +28,4 @@ function broadcast(client, msg) {
   }
 }
 
-server.listen(9527, 'localhost')
+// server.listen(9527, 'localhost')

@@ -6,6 +6,6 @@
 // WebSocket:
     客户端建立到服务端webSoket连接：new WebSocket('ws://localhost:8082')
     服务端搭建websocket服务器端搭建\收集客户端消息， 进行广播， new WebSocket.Server({ port: 8082 })
-
-// SharedWorker:
+// socket.io
+// SharedWorker: https://github.com/mdn/simple-shared-worker ????
 // Service Worker:
