@@ -54,6 +54,10 @@ export const constRoutes = [
            }
          },
          {
+           path: '/model',
+           component: () => import('@/views/model')
+         },
+         {
            path: '/:pathMatch(.*)*',
            component: () => import('@/views/no-found')
          }
