@@ -58,6 +58,10 @@ export const constRoutes = [
            component: () => import('@/views/model')
          },
          {
+           path: '/nextTick',
+           component: () => import('@/views/nextTick')
+         },
+         {
            path: '/:pathMatch(.*)*',
            component: () => import('@/views/no-found')
          }
