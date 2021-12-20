@@ -16,7 +16,7 @@ const entries = config.getEntries({
   pageFilter
 })
 const pages = entries.entries
-console.log('pages', pages)
+console.log('pages111', pages)
 
 console.time('build spend')
 if (!Object.keys(pages).length) {
@@ -151,7 +151,9 @@ module.exports = {
         automaticNameDelimiter: '~',
         name: true,
         chunks: 'all',
+        // 缓存分组
         cacheGroups: {
+          // 第三方模块node_modules
           vendors: {
             test: /([\\/]node_modules[\\/]|css)/,
             // 名字必须chunk-开头, reason： vue-cli中默认加了chunk-vendors chunk-common的入口
@@ -159,15 +161,16 @@ module.exports = {
             chunks: 'initial',
             priority: 2,
             enforce: true,
-            minChunks: 2
+            minChunks: 2 // 最少复用过几次就进行拆分
           },
+          // 公共模块
           common: {
             test: /\.(js|ts)$/,
-            name: 'chunk-common',
+            name: 'chunk-common', // chunk名称
             chunks: 'initial',
             reuseExistingChunk: true,
-            priority: 1,
-            minChunks: 2
+            priority: 1, // 优先级
+            minChunks: 2 //最少复用过几次
           }
         }
       }
