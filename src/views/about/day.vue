@@ -16,10 +16,14 @@
 </template>
 <script>
 import { defineComponent } from 'vue'
+import {getLeaveList} from '@/api/about'
 // import _ from 'lodash'
 
 export default defineComponent({
   mounted() {
+    getLeaveList().then((res) => {
+      console.log(res)
+    })
   },
   data() {
     return {

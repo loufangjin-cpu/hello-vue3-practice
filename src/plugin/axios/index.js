@@ -1,18 +1,18 @@
 import axios from 'axios';
 import qs from 'qs';
-import { Modal, message } from 'antd';
+// import { Modal, message } from 'antd';
 // import log from '@/utils/util.log';
 import codeMessage from './codeMessage.js';
 // import { language } from '@/utils/setLanguage';
 
-const confirm = Modal.confirm;
+// const confirm = Modal.confirm;
 // 记录和显示错误
 function errorLog(msg) {
-    log.danger(msg);
+    // log.danger(msg);
     if (Object.prototype.toString.call(msg) === '[object Error]') {
         msg = msg.message;
     }
-    message.error(msg);
+    // message.error(msg);
     return Promise.reject(msg);
 }
 
@@ -47,16 +47,16 @@ service.interceptors.response.use(
     (response) => {
         if (typeof response.data === 'string') {
             window.open(response.request.responseURL);
-            confirm({
-                title: '提示',
-                content: '登录成功后，请刷新当前页面！',
-                onOk() {
-                    window.location.reload();
-                },
-                onCancel() {
-                    window.location.reload();
-                },
-            });
+            // confirm({
+            //     title: '提示',
+            //     content: '登录成功后，请刷新当前页面！',
+            //     onOk() {
+            //         window.location.reload();
+            //     },
+            //     onCancel() {
+            //         window.location.reload();
+            //     },
+            // });
         }
 
         // dataAxios 是 axios 返回数据中的 data
