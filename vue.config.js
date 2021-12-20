@@ -6,8 +6,12 @@ const log = console.log
 const qs = require('query-string')
 
 const isDev = process.env.NODE_ENV === 'development'
+// 控制启动单独页面 yargs 如何处理命令行参数
 const argv = require('yargs').alias('p', 'page').argv
 const config = require('./config')
+const mocker = require('./mock');
+const proxyTarget = 'http://localhost:8080/';
+
 let pageFilter = argv.page
 if (typeof pageFilter === 'boolean') {
   pageFilter = '.*'
@@ -16,9 +20,7 @@ const entries = config.getEntries({
   pageFilter
 })
 const pages = entries.entries
-console.log('pages111', pages)
 
-console.time('build spend')
 if (!Object.keys(pages).length) {
   throw new Error('无可构建内容')
 }
@@ -36,7 +38,15 @@ const chainWebpack = (config) => {
     // 为开发环境修改配置...
     config.devServer
       // .stats('errors-only')
-      .proxy({})
+      .before(mocker)
+      .proxy({
+        '/klian': {
+          target: proxyTarget,
+          ws: true,
+          changeOrigin: true,
+          secure: false,
+        },
+      })
       .port(8082)
       .host('0.0.0.0')
       .contentBase(path.join(__dirname, 'src'))

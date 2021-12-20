@@ -1,6 +1,10 @@
 import { createApp } from 'vue'
 import App from './day.vue'
+import {i18n} from '@/plugin/vi18n'
+import messages from './lang/messages'
 // 初始化
 
 const app = createApp(App)
-app.use(App).mount('#container')
+app.use(i18n(
+  messages
+)).mount('#container')
