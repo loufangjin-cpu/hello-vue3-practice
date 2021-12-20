@@ -4,10 +4,9 @@ import zhCN from 'vant/lib/locale/lang/zh-CN'
 
 
 export const locales = function (a) {
-    if (a == 'en') {
-        Locale.use('en', enUS)
+    const localInfo = {
+        'en': enUS,
+        'zhCN': zhCN
     }
-    if (a == 'zhCN') {
-        Locale.use('cn', zhCN)
-    }
+    Locale.use(a, localInfo[a])
 }
