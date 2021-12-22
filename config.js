@@ -12,24 +12,23 @@ module.exports = {
       .sync(globPath)
       .filter((p) => regExp.test(p))
       .forEach((entry) => {
+        console.log('entry', entry)
         const config = require(entry)
         const dirs = entry.split('/')
         const tmp = dirs.slice(3, dirs.length - 1)
         const basename = tmp[tmp.length - 1]
         const pathname = tmp.join('/')
-
-        let outputPath = `${pathname}.html`
-        console.log('outputPath', outputPath)
-        if (config.project) {
-          outputPath = `${config.project}/${pathname}.html`
-        }
+        let outputPath = `${pathname}/index.html`
+        // config.ext = config.ext || 'js'
+        // config.main = config.main || `${basename}.${config.ext}`
+        
         entries[pathname] = Object.assign(
           {
             entry: `src/views/${pathname}/index.js`,
             template: `template/index.html`,
             title: '测试title',
             favicon: path.resolve(__dirname, './src/public/favicon.png'),
-            filename: `${basename}/index.html`,
+            filename: outputPath,
             chunksSortMode: 'manual',
             path: pathname,
             minify: {

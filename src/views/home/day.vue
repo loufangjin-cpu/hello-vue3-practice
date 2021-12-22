@@ -12,5 +12,6 @@ export default defineComponent({
 .home-box {
   font-size: 30px;
   width: 100px;
+  display: flex;
 }
 </style>

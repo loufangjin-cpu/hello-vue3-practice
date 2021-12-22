@@ -11,7 +11,9 @@ const argv = require('yargs').alias('p', 'page').argv
 const config = require('./config')
 const mocker = require('./mock');
 const proxyTarget = 'http://localhost:8080/';
-
+let publicPath = '/'
+// 配置输出路径，否则索引查找文件的时候路径会报错
+let outputDir = 'dist'
 let pageFilter = argv.page
 if (typeof pageFilter === 'boolean') {
   pageFilter = '.*'
@@ -47,27 +49,11 @@ const chainWebpack = (config) => {
           secure: false,
         },
       })
-      .port(8082)
+      .port(8083)
       .host('0.0.0.0')
       .contentBase(path.join(__dirname, 'src'))
       .hotOnly(true)
-      .set('onListening', (server) => {
-        const port = server.listeningApp.address().port
-        log('see:')
-        for (const n in pages) {
-          let params = ''
-          if (pages[n].getTestQueryParams) {
-            params = '?' + qs.stringify(pages[n].getTestQueryParams())
-          }
-          log(
-            chalk.underline.blue(
-              `${`http://localhost:${port}`}/${pages[n].path}${params}`
-            ) + `  --- ${pages[n].desc || pages[n].title}`
-          )
-        }
-        log('\n')
-      })
-      .end()
+      // .end()
   } else {
     // 为生产环境修改配置...
     config
@@ -80,22 +66,43 @@ const chainWebpack = (config) => {
         })
       )
       .end()
+      // 修复背景图片路径问题
+      config.module.rule('css').oneOf('vue').use('extract-css-loader')
+      .tap(options => {
+        if (options) {
+          options.publicPath =  publicPath
+        }
+        return options
+      })
+      config.module.rule('less').oneOf('vue').use('extract-css-loader')
+        .tap(options => {
+          if (options) {
+            options.publicPath =  publicPath
+          }
+          return options
+        })
+      config.plugin('extract-css').tap((options) => [
+        {
+            ignoreOrder: true, // 去除排序警告,
+            filename: 'css/[name].[contenthash:8].css',
+            chunkFilename: 'css/[name].[contenthash:8].css',
+        },
+      ]);
   }
   //
-  config.module
-    .rule('url')
-    .test(/\.(atlas|jsonp)$/)
-    .use('url')
-    .loader('url-loader')
-    .tap((options) => {
-      options = {
-        limit: 1024 * 3,
-        ...options
-      }
-      console.log(options)
-      return options
-    })
-    .end()
+  // config.module
+  //   .rule('url')
+  //   .test(/\.(atlas|jsonp)$/)
+  //   .use('url')
+  //   .loader('url-loader')
+  //   .tap((options) => {
+  //     options = {
+  //       limit: 1024 * 3,
+  //       ...options
+  //     }
+  //     return options
+  //   })
+  //   .end()
   // icon-svg
   // 默认svg, url-load对图片进行处理base64格式
   // 1、重点:删除默认配置中处理svg， 新增svg目录
@@ -111,28 +118,28 @@ const chainWebpack = (config) => {
     .options({ symbolId: 'icon-[name]' }) // #icon-[name] name是文件名
 }
 module.exports = {
-  publicPath: '/',
+  publicPath,
+  outputDir,
   pages,
-  // configureWebpack: {
-  //   resolve: {
-  //     alias: {
-  //       '@': path.join(__dirname, './src')
-  //     }
-  //   }
-  // }
+  chainWebpack,
   configureWebpack: (config) => {
     config.devtool = isDev
-      ? 'cheap-module-eval-source-map'
+      ? 'eval-source-map'
       : 'hidden-source-map'
-    Object.keys(pages).forEach((page) => {
-      // config.entry[page].unshift(path.resolve(__dirname, 'src/main.ts'))
-      config.entry[page]
-      return page
-    })
-    // if (useMock) {
-    //   config.entry['mock'] = '@/mock'
-    // }
-    config.resolve.alias['@'] = path.join(__dirname, './src')
+    // Object.keys(pages).forEach((page) => {
+    //   // config.entry[page].unshift(path.resolve(__dirname, 'src/main.ts'))
+    //   config.entry[page]
+    //   return page
+    // })
+    // config.resolve.alias['@'] = path.join(__dirname, './src')
+    if(!isDev) {
+      const terser = config.optimization.minimizer.find((plugin) => plugin instanceof TerserPlugin);
+      if (terser) {
+          terser.options.terserOptions.compress.drop_console = true;
+      }
+      config.output.filename = 'js/[name].[contenthash:8].js';
+      config.output.chunkFilename = 'js/[name].[contenthash:8].js';
+    }
     config.optimization = {
       concatenateModules: !isDev,
       runtimeChunk: false,
@@ -185,6 +192,23 @@ module.exports = {
         }
       }
     }
+      config.plugins.push(function () {
+        this.hooks.done.tap('done', function (stats) {
+          log('see:')
+          for (const n in pages) {
+            let params = ''
+            if (pages[n].getTestQueryParams) {
+              params = '?' + qs.stringify(pages[n].getTestQueryParams())
+            }
+            log(
+              chalk.underline.blue(
+                `${`http://localhost:8083`}/${pages[n].path}${params}`
+              ) + `  --- ${pages[n].desc || pages[n].title}`
+            )
+          }
+          log('\n')
+        })
+      })
   },
   pluginOptions: {
     dll: {
@@ -209,6 +233,5 @@ module.exports = {
       // mordern模式 针对非module模块插入会有问题，所以手动插入
       inject: false
     }
-  },
-  chainWebpack
+  }
 }
